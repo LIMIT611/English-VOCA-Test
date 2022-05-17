@@ -1,35 +1,39 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.IO;
 
 
 class TestSentence
 {
-    static void ChoseSentences(ref string[] sentences, ref string[] transSentences, ref string[] answers, int range)
+    static void ChoseSentences(ref string[] sentences, ref string[] answers, int range)
     {
         StreamReader sr;
         Random randomNum = new Random();
         List<int> randomNumList = new List<int>();
-        string[] readLine = new string[3];
-        int count = 0;
-        
-        sr = new StreamReader(@$"C:\Projects\cs\EnglishSentenceTest\english_sentences\day{range}.txt");
+        string[] readLine = new string[2];
+        int count = 0, randomNumber;
 
         while(randomNumList.Count < sentences.Length)
         {
-            randomNumList.Add(randomNum.Next(sentences.Length / 3));
+            randomNumber = randomNum.Next(sentences.Length);
+            
+            if (randomNumList.Contains(randomNumber) == false) randomNumList.Add(randomNumber);
         }
         
         foreach (int index in randomNumList)
         {
+            sr = new StreamReader(@$"C:\Projects\cs\EnglishSentenceTest\english_sentences\day{range}.txt");
+
             for (int j = 0; j < index; j++)
             {
                 readLine[0] = sr.ReadLine();
                 readLine[1] = sr.ReadLine();
-                readLine[2] = sr.ReadLine();
             }
                 
             sentences[count] = readLine[0];
-            transSentences[count] = readLine[1];
-            answers[count] = readLine[2];
+            answers[count] = readLine[1];
 
             count++;
         }
@@ -42,7 +46,6 @@ class TestSentence
         int range;
         string readAnswer;
         string[] sentences = new string[1];
-        string[] tranSentences = new string[1];
         string[] answers = new string[1];
 
         while(true)
@@ -52,20 +55,17 @@ class TestSentence
             range = int.Parse(Console.ReadLine());
             var lineCount = File.ReadAllLines(@$"C:\Projects\cs\EnglishSentenceTest\english_sentences\day{range}.txt").Length;
             
-            Array.Resize(ref sentences, lineCount / 3);
+            Array.Resize(ref sentences, lineCount / 2);
             Array.Clear(sentences, 0, sentences.Length);
-            Array.Resize(ref tranSentences, lineCount / 3);
-            Array.Clear(tranSentences, 0, sentences.Length);
-            Array.Resize(ref answers, lineCount / 3);
+            Array.Resize(ref answers, lineCount / 2);
             Array.Clear(answers, 0, sentences.Length);
         
-            ChoseSentences(ref sentences, ref tranSentences, ref answers, range);
+            ChoseSentences(ref sentences, ref answers, range);
         
             for (int i = 0; i < sentences.Length; i++)
             {
                 Console.WriteLine();
                 Console.WriteLine(sentences[i]);
-                Console.WriteLine(tranSentences[i]);
 
                 readAnswer = Console.ReadLine();
             
@@ -78,5 +78,6 @@ class TestSentence
 
             if (readAnswer == "NO") break;
         }
+
     }
 }
