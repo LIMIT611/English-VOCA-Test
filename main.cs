@@ -3,73 +3,77 @@
 
 class TestSentence
 {
-    static void ChoseSentences(ref string[] sentences, ref string[] answers, int rangeStart, int rangeEnd)
+    static void ChoseSentences(ref string[] sentences, ref string[] transSentences, ref string[] answers, int range)
     {
         StreamReader sr;
         Random randomNum = new Random();
         List<int> randomNumList = new List<int>();
-        string[] readLine = new string[2];
-        int lineCount, count = 0;
+        string[] readLine = new string[3];
+        int count = 0;
         
-        for (int i = rangeStart; i < rangeEnd; i++)
+        sr = new StreamReader(@$"C:\Projects\cs\EnglishSentenceTest\english_sentences\day{range}.txt");
+
+        while(randomNumList.Count < sentences.Length)
         {
-            sr = new StreamReader(@$"C:\Projects\cs\EnglishSentenceTest\english_sentence{i}.txt");
-            lineCount = File.ReadLines(@$"C:\Projects\cs\EnglishSentenceTest\english_sentence{i}.txt").Count();
-
-            while(randomNumList.Count < 10)
+            randomNumList.Add(randomNum.Next(sentences.Length / 3));
+        }
+        
+        foreach (int index in randomNumList)
+        {
+            for (int j = 0; j < index; j++)
             {
-                randomNumList.Add(randomNum.Next(lineCount / 2));
+                readLine[0] = sr.ReadLine();
+                readLine[1] = sr.ReadLine();
+                readLine[2] = sr.ReadLine();
             }
-            
-            foreach (int index in randomNumList)
-            {
-                for (int j = 0; j < index; j++)
-                {
-                    readLine[0] = sr.ReadLine();
-                    readLine[1] = sr.ReadLine();
-                }
                 
-                sentences[count] = readLine[0];
-                answers[count] = readLine[1];
+            sentences[count] = readLine[0];
+            transSentences[count] = readLine[1];
+            answers[count] = readLine[2];
 
-                count++;
-            }
+            count++;
         }
 
     }
+
+
     static void Main(string[] args)
     {
-        string[] testRange = new string[2];
-        int rangeStart, rangeEnd;
+        int range;
         string readAnswer;
         string[] sentences = new string[1];
+        string[] tranSentences = new string[1];
         string[] answers = new string[1];
 
         while(true)
         {
-            testRange = Console.ReadLine().Split();
-
-            rangeStart = int.Parse(testRange[0]);
-            rangeEnd = int.Parse(testRange[1]);
-
-            Array.Resize(ref sentences, 10 * (rangeEnd - rangeStart + 1));
+            Console.WriteLine();
+            Console.WriteLine("테스트할 범위를 입력하세요");
+            range = int.Parse(Console.ReadLine());
+            var lineCount = File.ReadAllLines(@$"C:\Projects\cs\EnglishSentenceTest\english_sentences\day{range}.txt").Length;
+            
+            Array.Resize(ref sentences, lineCount / 3);
             Array.Clear(sentences, 0, sentences.Length);
-            Array.Resize(ref answers, 10 * (rangeEnd - rangeStart + 1));
+            Array.Resize(ref tranSentences, lineCount / 3);
+            Array.Clear(tranSentences, 0, sentences.Length);
+            Array.Resize(ref answers, lineCount / 3);
             Array.Clear(answers, 0, sentences.Length);
         
-            ChoseSentences(ref sentences, ref answers, rangeStart, rangeEnd);
+            ChoseSentences(ref sentences, ref tranSentences, ref answers, range);
         
             for (int i = 0; i < sentences.Length; i++)
             {
+                Console.WriteLine();
                 Console.WriteLine(sentences[i]);
+                Console.WriteLine(tranSentences[i]);
 
                 readAnswer = Console.ReadLine();
             
-                if (readAnswer == answers[i]) Console.WriteLine("Correct Answer");
-                else Console.WriteLine($"Answer is {answers[i]}");
+                if (readAnswer == answers[i]) Console.WriteLine("\nCorrect Answer");
+                else Console.WriteLine($"\nAnswer is {answers[i]}");
             }
 
-            Console.WriteLine("RE? YES or NO");
+            Console.WriteLine("다시할래요? YES or NO");
             readAnswer = Console.ReadLine();
 
             if (readAnswer == "NO") break;
