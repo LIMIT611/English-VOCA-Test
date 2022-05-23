@@ -26,7 +26,7 @@ class TestSentence
         {
             sr = new StreamReader(@$"C:\Projects\cs\EnglishSentenceTest\english_sentences\day{range}.txt");
 
-            for (int j = 0; j < index; j++)
+            for (int j = 0; j <= index; j++)
             {
                 readLine[0] = sr.ReadLine();
                 readLine[1] = sr.ReadLine();
@@ -70,13 +70,13 @@ class TestSentence
                 readAnswer = Console.ReadLine();
             
                 if (readAnswer == answers[i]) Console.WriteLine("\nCorrect Answer");
-                else Console.WriteLine($"\nAnswer is {answers[i]}");
+                else Console.WriteLine($"\nAnswer is \"{answers[i]}\"");
             }
 
-            Console.WriteLine("다시할래요? YES or NO");
+            Console.WriteLine("다시할래요? (YES)");
             readAnswer = Console.ReadLine();
 
-            if (readAnswer == "NO") break;
+            if (readAnswer != "YES") break;
         }
 
     }
