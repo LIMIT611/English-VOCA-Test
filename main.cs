@@ -43,10 +43,12 @@ class TestSentence
 
     static void Main(string[] args)
     {
-        int range;
+        int range, count;
         string readAnswer;
         string[] sentences = new string[1];
         string[] answers = new string[1];
+        string[] tempSentences = new string[1];
+        string[] tempAnswers = new string[1];
 
         while(true)
         {
